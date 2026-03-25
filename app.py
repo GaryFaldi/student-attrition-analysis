@@ -6,7 +6,6 @@ import os
 import plotly.graph_objects as go
 import plotly.express as px
 
-# ── PAGE CONFIG ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Student Dropout Predictor",
     page_icon="🎓",
@@ -14,7 +13,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ── LOAD MODELS ───────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_models():
     model_dir = "models"
@@ -46,7 +44,6 @@ LABEL_MAP   = {0: "Dropout", 1: "Enrolled", 2: "Graduate"}
 LABEL_EMOJI = {0: "🚨", 1: "📚", 2: "🎓"}
 LABEL_COLOR = {0: "#ef4444", 1: "#eab308", 2: "#22c55e"}
 
-# Kolom wajib CSV (sesuai data training)
 CSV_REQUIRED_COLS = [
     "Application_mode", "Application_order", "Course",
     "Previous_qualification_grade", "Mothers_qualification",
@@ -60,7 +57,6 @@ CSV_REQUIRED_COLS = [
 ]
 
 
-# ── SIDEBAR ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.title("🎓 Student Dropout Predictor")
     st.caption("Jaya Jaya Institut · 2024")
@@ -81,7 +77,6 @@ with st.sidebar:
         st.info("Pastikan folder `models/` berisi file `.pkl` hasil training.")
 
 
-# ── HEADER ────────────────────────────────────────────────────────────────────
 st.title("🎓 Student Dropout Predictor")
 st.caption("Prediksi potensi dropout mahasiswa menggunakan Machine Learning")
 st.divider()
@@ -91,7 +86,6 @@ if not models_loaded:
     st.stop()
 
 
-# ── HELPER ────────────────────────────────────────────────────────────────────
 def predict(model_name, input_df):
     model = models[model_name]
     X = input_df[feature_names]
@@ -136,18 +130,13 @@ def make_gauge(prob, label_idx):
     return fig
 
 
-# ── TABS ──────────────────────────────────────────────────────────────────────
 tab1, tab2 = st.tabs(["✏️ Prediksi Manual", "📂 Prediksi Batch (CSV)"])
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 1 — MANUAL INPUT
-# ════════════════════════════════════════════════════════════════════════════
 with tab1:
     st.subheader("Input Data Mahasiswa")
 
     with st.form("manual_form"):
-        # ── Akademik ──────────────────────────────────────────────────────
         st.markdown("#### 📚 Latar Belakang Akademik")
         c1, c2, c3 = st.columns(3)
         with c1:
@@ -192,7 +181,6 @@ with tab1:
             ], format_func=lambda x: x[1])
             application_order = st.slider("Application Order", 0, 9, 1)
 
-        # ── Performa Semester ─────────────────────────────────────────────
         st.markdown("#### 📊 Performa Akademik Semester")
         c1, c2 = st.columns(2)
         with c1:
@@ -212,7 +200,6 @@ with tab1:
             cu2_credited    = st.number_input("Credited (Sem 2)",     0, 20, 0)
             cu2_no_eval     = st.number_input("Without Eval (Sem 2)", 0, 20, 0)
 
-        # ── Demografi & Sosial ────────────────────────────────────────────
         st.markdown("#### 👤 Demografi & Sosial Ekonomi")
         c1, c2, c3, c4 = st.columns(4)
         with c1:
@@ -284,15 +271,13 @@ with tab1:
         pred_idx    = pred[0]
         pred_label  = LABEL_MAP[pred_idx]
 
-        # Hitung probabilitas dropout vs tidak dropout
         prob_dropout    = proba[0][0]
-        prob_not_dropout = proba[0][1] + proba[0][2]  # Enrolled + Graduate digabung
+        prob_not_dropout = proba[0][1] + proba[0][2]
         is_dropout      = pred_idx == 0
 
         st.divider()
         st.subheader("🎯 Hasil Prediksi")
 
-        # ── Hasil utama: Dropout vs Tidak Dropout ─────────────────────────
         col_main, col_gauge = st.columns([3, 2])
 
         with col_main:
@@ -307,7 +292,6 @@ with tab1:
                     f"Model **{selected_model}** memprediksi mahasiswa ini **berpotensi menyelesaikan studi**."
                 )
 
-            # Keterangan konteks di bawah hasil
             st.caption(
                 "ℹ️ **Tentang prediksi ini:** Model dilatih dengan 3 kelas — *Dropout*, *Enrolled* (masih aktif), "
                 "dan *Graduate* (lulus). Untuk fokus deteksi risiko, hasil di atas menyederhanakan menjadi: "
@@ -320,7 +304,7 @@ with tab1:
             st.markdown("<center><b>Probabilitas Dropout</b></center>", unsafe_allow_html=True)
             st.plotly_chart(fig_main, use_container_width=True, key="gauge_main")
 
-        # ── Detail breakdown 3 kelas ──────────────────────────────────────
+
         with st.expander("📊 Lihat detail probabilitas per kelas (Dropout / Enrolled / Graduate)"):
             st.caption(
                 "Model aslinya memprediksi 3 kemungkinan status mahasiswa:\n\n"
@@ -339,13 +323,9 @@ with tab1:
                     )
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 2 — BATCH CSV
-# ════════════════════════════════════════════════════════════════════════════
 with tab2:
     st.subheader("Prediksi Batch via CSV")
 
-    # ── Keterangan kolom ──────────────────────────────────────────────────
     with st.expander("📋 Lihat kolom yang wajib ada di CSV", expanded=True):
         st.markdown(
             "CSV yang diupload **harus memiliki kolom berikut** (sesuai data training). "
@@ -363,7 +343,6 @@ with tab2:
 
     st.divider()
 
-    # Download template
     template_df = pd.DataFrame(columns=CSV_REQUIRED_COLS)
     template_df.loc[0] = [0] * len(CSV_REQUIRED_COLS)
     csv_template = template_df.to_csv(index=False).encode("utf-8")
@@ -381,14 +360,12 @@ with tab2:
             df_upload = pd.read_csv(uploaded)
             st.success(f"**{len(df_upload)} baris** berhasil dibaca.")
 
-            # Cek kolom yang hilang
             missing_required = [c for c in CSV_REQUIRED_COLS if c not in df_upload.columns]
             if missing_required:
                 st.warning(f"⚠️ Kolom berikut tidak ditemukan di CSV dan akan diisi 0:\n`{missing_required}`")
 
             st.dataframe(df_upload.head(5), use_container_width=True)
 
-            # Align ke feature_names model
             missing_feat = [c for c in feature_names if c not in df_upload.columns]
             for c in missing_feat:
                 df_upload[c] = 0
@@ -410,7 +387,6 @@ with tab2:
 
                 st.success(f"✅ Prediksi selesai untuk **{len(df_result)} mahasiswa**.")
 
-                # ── Ringkasan utama: binary dropout ───────────────────────
                 st.markdown("**Ringkasan Risiko Dropout**")
                 mc1, mc2, mc3 = st.columns(3)
                 mc1.metric("🚨 Berisiko Dropout",    n_dropout)
@@ -424,7 +400,6 @@ with tab2:
 
                 st.divider()
 
-                # ── Pie (tetap 3 kelas) + tabel ───────────────────────────
                 col_pie, col_table = st.columns([1, 2])
                 with col_pie:
                     fig_pie = px.pie(
@@ -461,7 +436,6 @@ with tab2:
                         height=280
                     )
 
-                # Download hasil
                 output_csv = df_result.to_csv(index=False).encode("utf-8")
                 st.download_button(
                     "⬇️ Download Hasil Prediksi CSV",

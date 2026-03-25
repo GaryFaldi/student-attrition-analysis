@@ -136,7 +136,7 @@ Berdasarkan pengujian menggunakan metrik standar klasifikasi, berikut adalah rin
 | Logistic Regression | 0.8576 | 0.8806 | 0.8576 | 0.8637 | 0.9646 |
 | SVM | 0.8565 | 0.8801 | 0.8565 | 0.8629 | 0.9656 |
 
-> ** Kesimpulan:** **Random Forest** dipilih sebagai model terbaik karena unggul di seluruh metrik utama, terutama pada nilai **ROC-AUC (0.9679)** dan **Accuracy (89.6%)**.
+> **Kesimpulan:** **Random Forest** dipilih sebagai model terbaik karena unggul di seluruh metrik utama, terutama pada nilai **ROC-AUC (0.9679)** dan **Accuracy (89.6%)**.
 
 ---
 

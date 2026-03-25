@@ -17,7 +17,7 @@ Tingginya angka dropout berdampak negatif terhadap reputasi institusi, efisiensi
 - Eksplorasi dan analisis data performa mahasiswa (EDA)
 - Identifikasi faktor-faktor yang berkorelasi dengan dropout
 - Pembangunan model machine learning untuk prediksi status mahasiswa (Dropout / Enrolled / Graduate)
-- Pembuatan business dashboard untuk monitoring performa mahasiswa
+- Pembuatan business dashboard dengan metabase
 - Pengembangan prototype aplikasi prediksi berbasis Streamlit
 
 ### Persiapan
@@ -27,7 +27,7 @@ Dataset berisi 4.424 baris dan 37 kolom mencakup informasi akademik, demografis,
 
 #### 1. Clone Repository
 
-Silahkan Download semua file yang ada di Gdrive: [https://drive.google.com/drive/folders/1LRtRMhq6sHkRJZvTg32Xb3j7BD8D5ONH?usp=drive_link](https://drive.google.com/drive/folders/1LRtRMhq6sHkRJZvTg32Xb3j7BD8D5ONH?usp=drive_link)
+Silahkan Download semua file yang ada di Gdrive: [https://drive.google.com/drive/folders/1EfR-EucVlEGSZSZSkZcHQJj5eOEkgBgl?usp=sharing](https://drive.google.com/drive/folders/1EfR-EucVlEGSZSZSkZcHQJj5eOEkgBgl?usp=sharing)
 
 #### 2. Membuat Virtual Environment
 
@@ -122,16 +122,46 @@ Berdasarkan hasil analisis data dan pemodelan machine learning, diperoleh kesimp
 
 4. **Usia pendaftaran** — Mahasiswa yang masuk di usia lebih tua (>30 tahun) cenderung memiliki risiko dropout lebih tinggi dibanding mahasiswa usia 15–22 tahun.
 
-**Performa model machine learning:**
+##  Evaluasi Performa Model
 
-| Model | Accuracy | F1-Score | ROC-AUC |
-|---|---|---|---|
-| **Random Forest** | **0.8960** | **0.8902** | **0.9679** |
-| XGBoost | 0.8904 | 0.8894 | 0.9660 |
-| Logistic Regression | 0.8576 | 0.8637 | 0.9646 |
-| SVM | 0.8565 | 0.8629 | 0.9656 |
+Bagian ini merinci hasil eksperimen beberapa algoritma *machine learning* untuk menentukan model terbaik dalam memprediksi status akademik mahasiswa (*Dropout, Enrolled, Graduate*).
 
-**Random Forest** dipilih sebagai model terbaik dengan ROC-AUC **0.9679** dan Accuracy **89.6%**.
+### 1. Perbandingan Performa Antar Model
+Berdasarkan pengujian menggunakan metrik standar klasifikasi, berikut adalah ringkasan performa dari seluruh model yang diuji:
+
+| Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Random Forest** | **0.8960** | **0.8926** | **0.8960** | **0.8902** | **0.9679** |
+| XGBoost | 0.8904 | 0.8886 | 0.8904 | 0.8894 | 0.9660 |
+| Logistic Regression | 0.8576 | 0.8806 | 0.8576 | 0.8637 | 0.9646 |
+| SVM | 0.8565 | 0.8801 | 0.8565 | 0.8629 | 0.9656 |
+
+> ** Kesimpulan:** **Random Forest** dipilih sebagai model terbaik karena unggul di seluruh metrik utama, terutama pada nilai **ROC-AUC (0.9679)** dan **Accuracy (89.6%)**.
+
+---
+
+### 2. Detail Klasifikasi: Random Forest (Best Model)
+Untuk memahami performa model pada setiap label kategori, berikut adalah detail *Classification Report* dari model Random Forest:
+
+| Class | Precision | Recall | F1-Score | Support |
+| :--- | :---: | :---: | :---: | :---: |
+| **Dropout** | 1.00 | 1.00 | 1.00 | 284 |
+| **Enrolled** | 0.79 | 0.57 | 0.66 | 159 |
+| **Graduate** | 0.86 | 0.95 | 0.90 | 442 |
+| | | | | |
+| **Accuracy** | | | **0.90** | **885** |
+| **Macro Avg** | 0.88 | 0.84 | 0.86 | 885 |
+| **Weighted Avg** | 0.89 | 0.90 | 0.89 | 885 |
+
+#### **Analisis Hasil:**
+* **Prediksi Dropout Sempurna:** Model memiliki performa sempurna (Score: 1.00) dalam mendeteksi kelas *Dropout*. Hal ini sangat penting untuk memberikan intervensi tepat sasaran.
+* **Akurasi Lulusan Tinggi:** Model sangat kuat dalam mengenali mahasiswa yang akan lulus (*Graduate*) dengan F1-Score sebesar **0.90**.
+* **Tantangan Kelas Enrolled:** Kelas *Enrolled* memiliki skor terendah (F1: 0.66). Ini menunjukkan adanya kemiripan pola data antara mahasiswa yang masih aktif dengan mereka yang berpotensi lulus atau dropout di masa mendatang.
+
+---
+
+### 3. Ringkasan Akhir
+Model **Random Forest** memberikan keseimbangan terbaik antara presisi dan daya panggil (*recall*). Dengan nilai **ROC-AUC mendekati 1.0**, model ini terbukti sangat reliabel untuk digunakan dalam sistem prediksi status keberlanjutan studi mahasiswa.
 
 ### Rekomendasi Action Items
 

@@ -126,7 +126,7 @@ Berdasarkan hasil analisis data dan pemodelan machine learning, diperoleh kesimp
 
 Bagian ini merinci hasil eksperimen beberapa algoritma *machine learning* untuk menentukan model terbaik dalam memprediksi status akademik mahasiswa (*Dropout, Enrolled, Graduate*).
 
-##### 1. Perbandingan Performa Antar Model
+#### 1. Perbandingan Performa Antar Model
 Berdasarkan pengujian menggunakan metrik standar klasifikasi, berikut adalah ringkasan performa dari seluruh model yang diuji:
 
 | Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
@@ -140,7 +140,7 @@ Berdasarkan pengujian menggunakan metrik standar klasifikasi, berikut adalah rin
 
 ---
 
-##### 2. Detail Klasifikasi: Random Forest (Best Model)
+#### 2. Detail Klasifikasi: Random Forest (Best Model)
 Untuk memahami performa model pada setiap label kategori, berikut adalah detail *Classification Report* dari model Random Forest:
 
 | Class | Precision | Recall | F1-Score | Support |
@@ -160,7 +160,7 @@ Untuk memahami performa model pada setiap label kategori, berikut adalah detail 
 
 ---
 
-##### 3. Ringkasan Akhir
+#### 3. Ringkasan Akhir
 Model **Random Forest** memberikan keseimbangan terbaik antara presisi dan daya panggil (*recall*). Dengan nilai **ROC-AUC mendekati 1.0**, model ini terbukti sangat reliabel untuk digunakan dalam sistem prediksi status keberlanjutan studi mahasiswa.
 
 ### Rekomendasi Action Items

@@ -122,41 +122,40 @@ Berdasarkan hasil analisis data dan pemodelan machine learning, diperoleh kesimp
 
 4. **Usia pendaftaran** — Mahasiswa yang masuk di usia lebih tua (>30 tahun) cenderung memiliki risiko dropout lebih tinggi dibanding mahasiswa usia 15–22 tahun.
 
-####  Evaluasi Performa Model
+## 📊 Evaluasi Performa Model
 
-Bagian ini merinci hasil eksperimen beberapa algoritma *machine learning* untuk menentukan model terbaik dalam memprediksi status akademik mahasiswa (*Dropout, Enrolled, Graduate*).
+Bagian ini merinci hasil eksperimen beberapa algoritma *machine learning* untuk menentukan model terbaik dalam memprediksi status akademik mahasiswa (*Dropout* dan *Graduate*).
 
-#### 1. Perbandingan Performa Antar Model
-Berdasarkan pengujian menggunakan metrik standar klasifikasi, berikut adalah ringkasan performa dari seluruh model yang diuji:
+### 1. Perbandingan Performa Antar Model
+Berdasarkan pengujian pada data uji, berikut adalah ringkasan performa dari seluruh algoritma yang dievaluasi:
 
 | Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Random Forest** | **0.8960** | **0.8926** | **0.8960** | **0.8902** | **0.9679** |
-| XGBoost | 0.8904 | 0.8886 | 0.8904 | 0.8894 | 0.9660 |
-| Logistic Regression | 0.8576 | 0.8806 | 0.8576 | 0.8637 | 0.9646 |
-| SVM | 0.8565 | 0.8801 | 0.8565 | 0.8629 | 0.9656 |
+| **Random Forest** | **0.9105** | **0.9139** | **0.9105** | **0.9090** | **0.9542** |
+| SVM | 0.9077 | 0.9078 | 0.9077 | 0.9071 | 0.9516 |
+| XGBoost | 0.9050 | 0.9060 | 0.9050 | 0.9039 | 0.9455 |
+| Logistic Regression | 0.9036 | 0.9033 | 0.9036 | 0.9033 | 0.9493 |
 
-> **Kesimpulan:** **Random Forest** dipilih sebagai model terbaik karena unggul di seluruh metrik utama, terutama pada nilai **ROC-AUC (0.9679)** dan **Accuracy (89.6%)**.
+> **Kesimpulan:** **Random Forest** dipilih sebagai model terbaik (*Best Model*) karena unggul di seluruh metrik utama, terutama pada nilai **Accuracy (91.05%)** dan **F1-Score (0.9090)**.
 
 ---
 
-#### 2. Detail Klasifikasi: Random Forest (Best Model)
-Untuk memahami performa model pada setiap label kategori, berikut adalah detail *Classification Report* dari model Random Forest:
+### 2. Detail Klasifikasi: Random Forest (Best Model)
+Untuk memahami seberapa baik model mengenali masing-masing kategori (Dropout vs Graduate), berikut adalah rincian dari *Classification Report*:
 
 | Class | Precision | Recall | F1-Score | Support |
 | :--- | :---: | :---: | :---: | :---: |
-| **Dropout** | 1.00 | 1.00 | 1.00 | 284 |
-| **Enrolled** | 0.79 | 0.57 | 0.66 | 159 |
-| **Graduate** | 0.86 | 0.95 | 0.90 | 442 |
+| **Dropout** | 0.95 | 0.81 | 0.88 | 284 |
+| **Graduate** | 0.89 | 0.97 | 0.93 | 442 |
 | | | | | |
-| **Accuracy** | | | **0.90** | **885** |
-| **Macro Avg** | 0.88 | 0.84 | 0.86 | 885 |
-| **Weighted Avg** | 0.89 | 0.90 | 0.89 | 885 |
+| **Accuracy** | | | **0.91** | **726** |
+| **Macro Avg** | 0.92 | 0.89 | 0.90 | 726 |
+| **Weighted Avg** | 0.91 | 0.91 | 0.91 | 726 |
 
 #### **Analisis Hasil:**
-* **Prediksi Dropout Sempurna:** Model memiliki performa sempurna (Score: 1.00) dalam mendeteksi kelas *Dropout*. Hal ini sangat penting untuk memberikan intervensi tepat sasaran.
-* **Akurasi Lulusan Tinggi:** Model sangat kuat dalam mengenali mahasiswa yang akan lulus (*Graduate*) dengan F1-Score sebesar **0.90**.
-* **Tantangan Kelas Enrolled:** Kelas *Enrolled* memiliki skor terendah (F1: 0.66). Ini menunjukkan adanya kemiripan pola data antara mahasiswa yang masih aktif dengan mereka yang berpotensi lulus atau dropout di masa mendatang.
+* **Deteksi Graduate yang Sangat Kuat:** Model memiliki nilai *Recall* sebesar **0.97** untuk kelas *Graduate*. Ini berarti model hampir tidak pernah melewatkan mahasiswa yang memang akan lulus.
+* **Presisi Dropout Tinggi:** Dengan *Precision* **0.95** pada kelas *Dropout*, model sangat akurat saat memberikan label "Berisiko Dropout". Jika model memprediksi seseorang akan dropout, kemungkinan besarnya (95%) prediksi tersebut benar.
+* **Keseimbangan Performa:** Nilai F1-Score yang tinggi di kedua kelas (0.88 dan 0.93) menunjukkan model ini stabil dan memiliki kemampuan generalisasi yang baik untuk data baru.
 
 ---
 

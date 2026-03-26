@@ -40,9 +40,9 @@ except Exception as e:
 
 NEEDS_SCALING = {"Logistic Regression", "SVM"}
 
-LABEL_MAP   = {0: "Dropout", 1: "Enrolled", 2: "Graduate"}
-LABEL_EMOJI = {0: "🚨", 1: "📚", 2: "🎓"}
-LABEL_COLOR = {0: "#ef4444", 1: "#eab308", 2: "#22c55e"}
+LABEL_MAP   = {0: "Dropout", 1: "Graduate"}
+LABEL_EMOJI = {0: "🚨", 1: "🎓"}
+LABEL_COLOR = {0: "#ef4444", 1: "#22c55e"}
 
 CSV_REQUIRED_COLS = [
     "Application_mode", "Application_order", "Course",
@@ -70,7 +70,6 @@ with st.sidebar:
         st.divider()
         st.markdown("**Keterangan Status**")
         st.markdown("🎓 **Graduate** — Lulus normal")
-        st.markdown("📚 **Enrolled** — Masih aktif")
         st.markdown("🚨 **Dropout** — Berisiko DO")
     else:
         st.error(f"Model tidak ditemukan: `{load_error}`")
@@ -224,7 +223,7 @@ with tab1:
             mothers_occ  = st.number_input("Mother's Occupation",    0, 194, 5)
             fathers_occ  = st.number_input("Father's Occupation",    0, 194, 5)
 
-        submitted = st.form_submit_button("🔮 Prediksi Sekarang", use_container_width=True)
+        submitted = st.form_submit_button("Prediksi Sekarang", use_container_width=True)
 
     if submitted:
         input_data = {
@@ -272,7 +271,7 @@ with tab1:
         pred_label  = LABEL_MAP[pred_idx]
 
         prob_dropout    = proba[0][0]
-        prob_not_dropout = proba[0][1] + proba[0][2]
+        prob_not_dropout = proba[0][1]
         is_dropout      = pred_idx == 0
 
         st.divider()
@@ -293,9 +292,8 @@ with tab1:
                 )
 
             st.caption(
-                "ℹ️ **Tentang prediksi ini:** Model dilatih dengan 3 kelas — *Dropout*, *Enrolled* (masih aktif), "
-                "dan *Graduate* (lulus). Untuk fokus deteksi risiko, hasil di atas menyederhanakan menjadi: "
-                "**Dropout** vs **Tidak Dropout** (gabungan Enrolled + Graduate). "
+                "ℹ️ **Tentang prediksi ini:** Model dilatih dengan 2 kelas — *Dropout* dan *Graduate*. Untuk fokus deteksi risiko, hasil di atas menyederhanakan menjadi: "
+                "**Dropout** vs **Tidak Dropout**"
                 "Detail probabilitas masing-masing kelas tersedia di bawah."
             )
 
@@ -305,16 +303,15 @@ with tab1:
             st.plotly_chart(fig_main, use_container_width=True, key="gauge_main")
 
 
-        with st.expander("📊 Lihat detail probabilitas per kelas (Dropout / Enrolled / Graduate)"):
+        with st.expander("📊 Lihat detail probabilitas per kelas (Dropout / Graduate)"):
             st.caption(
-                "Model aslinya memprediksi 3 kemungkinan status mahasiswa:\n\n"
+                "Model aslinya memprediksi 2 kemungkinan status mahasiswa:\n\n"
                 "- 🚨 **Dropout** — Mahasiswa tidak menyelesaikan studi\n"
-                "- 📚 **Enrolled** — Mahasiswa masih aktif kuliah (belum ada keputusan akhir)\n"
                 "- 🎓 **Graduate** — Mahasiswa berhasil lulus\n\n"
                 f"Prediksi detail model: **{pred_label}** (kelas dengan probabilitas tertinggi)"
             )
-            g1, g2, g3 = st.columns(3)
-            for col_g, (lbl, emoji) in zip([g1, g2, g3], [(0,"🚨"),(1,"📚"),(2,"🎓")]):
+            g1, g2 = st.columns(2)
+            for col_g, (lbl, emoji) in zip([g1, g2], [(0,"🚨"),(1,"🎓")]):
                 with col_g:
                     st.markdown(f"<center>{emoji} <b>{LABEL_MAP[lbl]}</b></center>", unsafe_allow_html=True)
                     st.plotly_chart(
@@ -370,16 +367,15 @@ with tab2:
             for c in missing_feat:
                 df_upload[c] = 0
 
-            if st.button("🚀 Jalankan Prediksi Batch", use_container_width=True):
+            if st.button("Jalankan Prediksi Batch", use_container_width=True):
                 with st.spinner("Memproses prediksi..."):
                     preds, probas = predict(selected_model, df_upload)
 
                 df_result = df_upload.copy()
                 df_result["Predicted_Status"]  = [LABEL_MAP[p] for p in preds]
-                df_result["Risiko_Dropout"]     = ["🚨 Berisiko" if p == 0 else "✅ Tidak Berisiko" for p in preds]
+                df_result["Risiko_Dropout"]     = ["Berisiko" if p == 0 else "✅ Tidak Berisiko" for p in preds]
                 df_result["Prob_Dropout"]       = (probas[:, 0] * 100).round(2)
-                df_result["Prob_Enrolled"]      = (probas[:, 1] * 100).round(2)
-                df_result["Prob_Graduate"]      = (probas[:, 2] * 100).round(2)
+                df_result["Prob_Graduate"]      = (probas[:, 1] * 100).round(2)
 
                 n_dropout     = int((np.array(preds) == 0).sum())
                 n_not_dropout = len(preds) - n_dropout
@@ -408,11 +404,10 @@ with tab2:
                         color=counts.index,
                         color_discrete_map={
                             "Dropout" : "#ef4444",
-                            "Enrolled": "#eab308",
                             "Graduate": "#22c55e"
                         },
                         hole=0.45,
-                        title="Distribusi Prediksi (3 Kelas)"
+                        title="Distribusi Prediksi (2 Kelas)"
                     )
                     fig_pie.update_layout(
                         height=300,
@@ -429,7 +424,6 @@ with tab2:
                             .background_gradient(subset=["Prob_Graduate"], cmap="Greens")
                             .format({
                                 "Prob_Dropout" : "{:.1f}%",
-                                "Prob_Enrolled": "{:.1f}%",
                                 "Prob_Graduate": "{:.1f}%",
                             }),
                         use_container_width=True,

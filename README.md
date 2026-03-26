@@ -2,15 +2,15 @@
 
 ## Business Understanding
 
-Jaya Jaya Institut merupakan institusi pendidikan perguruan tinggi yang telah berdiri sejak tahun 2000. Hingga saat ini institusi ini telah mencetak banyak lulusan dengan reputasi yang sangat baik. Namun demikian, terdapat permasalahan serius berupa tingginya angka mahasiswa yang tidak menyelesaikan pendidikannya alias **dropout** (32.1% dari total 4.424 mahasiswa).
+Jaya Jaya Institut merupakan institusi pendidikan perguruan tinggi yang telah berdiri sejak tahun 2000. Hingga saat ini, institusi ini telah mencetak banyak lulusan dengan reputasi yang sangat baik. Namun, seiring berjalannya waktu, pihak manajemen mulai menyadari adanya fenomena yang mengkhawatirkan, yaitu tingginya jumlah mahasiswa yang tidak menyelesaikan pendidikannya (dropout).
 
-Tingginya angka dropout berdampak negatif terhadap reputasi institusi, efisiensi operasional, dan kualitas output pendidikan. Oleh karena itu, Jaya Jaya Institut ingin mendeteksi sedini mungkin mahasiswa yang berpotensi dropout sehingga dapat diberikan bimbingan dan intervensi khusus sebelum terlambat.
+Masalah dropout ini tidak hanya merugikan mahasiswa secara personal, tetapi juga berdampak negatif terhadap reputasi institusi, menurunkan efisiensi operasional, serta menghambat pencapaian kualitas output pendidikan yang diharapkan. Selama ini, pihak institusi belum memiliki sistem yang mampu memetakan faktor-faktor penyebab dropout secara mendalam maupun mendeteksi mahasiswa yang berisiko tinggi sejak dini.
 
 ### Permasalahan Bisnis
 
-1. **Tingginya angka dropout** — 32.1% mahasiswa (1.421 dari 4.424) tidak menyelesaikan studi, angka yang signifikan bagi reputasi institusi.
-2. **Tidak adanya sistem deteksi dini** — Institusi belum memiliki mekanisme untuk mengidentifikasi mahasiswa berisiko dropout secara proaktif.
-3. **Belum dipahaminya faktor penyebab dropout** — Perlu analisis mendalam terhadap faktor akademik, finansial, dan demografis yang berkontribusi terhadap dropout.
+1. **Tingginya angka dropout** — Institusi menghadapi tantangan serius terkait banyaknya mahasiswa yang tidak menyelesaikan masa studinya. Fenomena ini jika dibiarkan akan merusak reputasi akademik Jaya Jaya Institut dan menurunkan efisiensi operasional pendidikan.
+2. **Tidak adanya sistem deteksi dini** — Saat ini, institusi belum memiliki sistem atau alat bantu yang mampu mengidentifikasi mahasiswa dengan risiko dropout tinggi secara proaktif. Hal ini menyebabkan penanganan terhadap mahasiswa yang bermasalah seringkali terlambat (setelah mahasiswa tersebut benar-benar keluar).
+3. **Belum dipahaminya faktor penyebab dropout** — Belum adanya analisis komprehensif mengenai faktor apa saja (baik dari sisi akademik, kondisi finansial, maupun latar belakang demografis) yang paling kuat berkontribusi terhadap keputusan mahasiswa untuk berhenti studi.terhadap dropout.
 
 ### Cakupan Proyek
 
